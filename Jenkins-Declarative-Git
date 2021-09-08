@@ -16,7 +16,7 @@ pipeline{
              steps{
                sshagent(['ubuntu01']) {
                sh """
-                  scp -o StrictHostKeyChecking=no  /var/lib/jenkins/workspace/Jenkins-Declarative-Git/target/mywebserver.war ubuntu@172.31.19.26:/opt/tomcat/webapp/
+                  scp -o StrictHostKeyChecking=no  /var/lib/jenkins/workspace/Jenkins-Declarative-Git/target/mywebserver.war ubuntu@172.31.19.26:/opt/tomcat/webapps/
                   
                    ssh ubuntu@172.31.19.26 /opt/tomcat/bin/shutdown.sh
                   
