@@ -1,0 +1,33 @@
+pipeline{
+    agent any
+  
+    stages{
+        stage("Git Checkout"){
+            steps{
+               git credentialsId: 'e1e806ff-3b29-4442-8bae-90be3bc42d73', url: 'https://github.com/kolanti444/mahalogin.git'
+            }
+        }
+         stage("Maven Build"){
+            steps{
+              sh "mvn clean package"
+              sh "mv target/*.war target/mywebserver.war"
+            }
+        }
+         stage("Deploy-dev"){
+             steps{
+               sshagent(['c58e0426-439c-42bb-8cba-8a2133122179']) {
+               sh """
+                  scp -o StrictHostKeyChecking=no target/mywebserver.war ubuntu@172.31.19.26:/opt/tomcat/webapps/
+                  
+                   ssh ubuntu@172.31.19.26 /opt/tomcat/bin/shutdown.sh
+                  
+                   ssh ubuntu@172.31.19.26 /opt/tomcat/bin/startup.sh
+               
+               """
+                }
+              
+             }
+         
+         }
+    }
+}
