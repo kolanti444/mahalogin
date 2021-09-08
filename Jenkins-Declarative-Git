@@ -16,7 +16,7 @@ pipeline{
              steps{
                sshagent(['ubuntu01']) {
                sh """
-                  scp -o StrictHostKeyChecking=no  Jenkins-Declarative-Git/mahaLogin-3.0/target/mywebserver.war ubuntu@172.31.19.26:/opt/tomcat/webapps/
+                  scp -o StrictHostKeyChecking=no  target/mywebserver.war ubuntu@172.31.19.26:/opt/tomcat/webapps/
                   
                    ssh ubuntu@172.31.19.26 /opt/tomcat/bin/shutdown.sh
                   
