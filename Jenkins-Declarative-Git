@@ -16,11 +16,11 @@ pipeline{
              steps{
                sshagent(['ubuntu01']) {
                sh """
-                  scp -o StrictHostKeyChecking=no target/mywebserver.war ubuntu@172.31.19.26:/opt/tomcat/webapps/
+                  scp -o StrictHostKeyChecking=no target/mywebserver.war ubuntu@172.31.19.26:/home/ubuntu/tomcat/webapps/
                   
-                   ssh ubuntu@172.31.19.26 /opt/tomcat/bin/shutdown.sh
+                   ssh ubuntu@172.31.19.26 /home/ubuntu/tomcat/bin/shutdown.sh
                   
-                   ssh ubuntu@172.31.19.26 /opt/tomcat/bin/startup.sh
+                   ssh ubuntu@172.31.19.26 /home/ubuntu/tomcat/bin/startup.sh
                
                """
                 }
