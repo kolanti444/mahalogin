@@ -14,7 +14,7 @@ pipeline{
            }
         stage("archieve the artifacts"){
             steps{
-              archiveArtifacts artifacts: 'archiveArtifacts artifacts: '/var/lib/jenkins/workspace/Declarative-pipeline-01/target/mahaLogin.war'', followSymlinks: false
+              archiveArtifacts artifacts: 'archiveArtifacts artifacts: '/var/lib/jenkins/workspace/Declarative-pipeline-01/target/mahaLogin.war/'', followSymlinks: false
             }
            }
          }
