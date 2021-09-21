@@ -1,5 +1,6 @@
 pipeline{
     agent any
+     tools
   
     stages{
         stage("Git Checkout"){
@@ -10,7 +11,11 @@ pipeline{
          stage("Maven Build"){
             steps{
               sh "mvn clean package"
-              sh "mv target/*.war target/mywebserver.war"
+            }
+           }
+        stage("archieve the artifacts"){
+            steps{
+              archiveArtifacts artifacts: 'archiveArtifacts artifacts: \'target/*.war\'', followSymlinks: false
             }
            }
          }
