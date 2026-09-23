@@ -46,6 +46,11 @@
     </exclusions>
 </dependency>
 
+             <repository>
+    <id>jaspersoft-third-party</id>
+    <url>http://jaspersoft.artifactoryonline.com/jaspersoft/third-party-ce-artifacts/</url>
+</repository>
+
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
