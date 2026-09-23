@@ -1,12 +1,38 @@
-FROM maven:3.9-eclipse-temurin-21 AS build
-WORKDIR /app
-COPY pom.xml .
-RUN mvn dependency:go-offline -B
-COPY src ./src
-RUN mvn clean package -DskipTests
+```dockerfile
+# ============================================================
+# Stage 1: Build the application
+# ============================================================
+FROM maven:3.9-eclipse-temurin-21 AS builder
 
-FROM tomcat:9.0-jdk21-temurin
-RUN rm -rf /usr/local/tomcat/webapps/ROOT
-COPY --from=build /app/target/mahaLogin-1.0.war /usr/local/tomcat/webapps/ROOT.war
+WORKDIR /app
+
+# Copy Maven configuration first for better Docker layer caching
+COPY pom.xml .
+
+# Download dependencies
+RUN mvn dependency:go-offline -B
+
+# Copy application source
+COPY src ./src
+
+# Build WAR
+RUN mvn clean package -DskipTests -B
+
+
+# ============================================================
+# Stage 2: Runtime
+# ============================================================
+FROM jetty:9.4-jre21
+
+# Remove default Jetty web applications if present
+RUN rm -rf /var/lib/jetty/webapps/*
+
+# Copy generated WAR
+COPY --from=builder /app/target/mahaLogin.war /var/lib/jetty/webapps/ROOT.war
+
+# Jetty HTTP port
 EXPOSE 8080
-CMD ["catalina.sh", "run"]
+
+# Start Jetty
+CMD ["java", "-jar", "/usr/local/jetty/start.jar"]
+```
