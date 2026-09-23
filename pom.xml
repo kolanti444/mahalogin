@@ -1,51 +1,85 @@
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
+
     <groupId>com.maha</groupId>
     <artifactId>mahaLogin</artifactId>
-    <packaging>war</packaging>
     <version>1.0</version>
+    <packaging>war</packaging>
+
     <name>Account Registration Webapp</name>
-    <url>http://maven.apache.org</url>
+
     <properties>
+
+        <!-- Java -->
+        <maven.compiler.release>21</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- Spring -->
         <spring.version>4.2.0.RELEASE</spring.version>
         <spring-security.version>4.0.2.RELEASE</spring-security.version>
         <spring-data-jpa.version>1.8.2.RELEASE</spring-data-jpa.version>
+
+        <!-- Hibernate -->
         <hibernate.version>4.3.11.Final</hibernate.version>
         <hibernate-validator.version>5.2.1.Final</hibernate-validator.version>
+
+        <!-- Database -->
         <mysql-connector.version>5.1.36</mysql-connector.version>
         <commons-dbcp.version>1.4</commons-dbcp.version>
+
+        <!-- Web -->
         <jstl.version>1.2</jstl.version>
-        <junit.version>3.8.1</junit.version>
+
+        <!-- Logging -->
         <logback.version>1.1.3</logback.version>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+
+        <!-- Testing -->
+        <junit.version>3.8.1</junit.version>
+
+        <!-- Plugin versions -->
+        <maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
+        <maven.war.plugin.version>3.4.0</maven.war.plugin.version>
+        <maven.dependency.plugin.version>3.7.0</maven.dependency.plugin.version>
+        <jetty.maven.plugin.version>9.2.11.v20150529</jetty.maven.plugin.version>
+
     </properties>
 
     <dependencies>
+
+        <!-- Spring Web -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
             <version>${spring.version}</version>
         </dependency>
 
-     <!--  <dependency>
-        <artifactId>spring-webmvc</artifactId>
-           <version>${spring.version}</version>
-        </dependency> 
-      -->
-         <dependency>
-    <groupId>org.springframework</groupId>
-    <artifactId>spring-webmvc</artifactId>
-    <version>${spring.version}</version>
-    <exclusions>
-        <exclusion>
-            <groupId>net.sf.jasperreports</groupId>
-            <artifactId>jasperreports</artifactId>
-        </exclusion>
-    </exclusions>
-</dependency>
+        <!-- Spring MVC -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
 
+            <!--
+                JasperReports is intentionally excluded because the previous
+                dependency chain attempted to download the obsolete
+                com.lowagie:itext:2.1.7.js2 artifact from an HTTP repository.
+            -->
+            <exclusions>
+                <exclusion>
+                    <groupId>net.sf.jasperreports</groupId>
+                    <artifactId>jasperreports</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- Spring Security -->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
@@ -58,42 +92,49 @@
             <version>${spring-security.version}</version>
         </dependency>
 
+        <!-- Hibernate Validator -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
             <version>${hibernate-validator.version}</version>
         </dependency>
 
+        <!-- Spring Data JPA -->
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
             <version>${spring-data-jpa.version}</version>
         </dependency>
 
+        <!-- Hibernate -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
             <version>${hibernate.version}</version>
         </dependency>
 
+        <!-- MySQL -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>${mysql-connector.version}</version>
         </dependency>
 
+        <!-- Apache Commons DBCP -->
         <dependency>
             <groupId>commons-dbcp</groupId>
             <artifactId>commons-dbcp</artifactId>
             <version>${commons-dbcp.version}</version>
         </dependency>
 
+        <!-- JSTL -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
             <version>${jstl.version}</version>
         </dependency>
 
+        <!-- JUnit -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -101,25 +142,66 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Logback -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
         </dependency>
+
     </dependencies>
+
     <build>
+
+        <finalName>mahaLogin</finalName>
+
         <plugins>
+
+            <!-- Java 21 compilation -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.plugin.version}</version>
+                <configuration>
+                    <release>${maven.compiler.release}</release>
+                </configuration>
+            </plugin>
+
+            <!-- WAR packaging -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>${maven.war.plugin.version}</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+
+            <!-- Dependency plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>${maven.dependency.plugin.version}</version>
+            </plugin>
+
+            <!-- Jetty -->
             <plugin>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
-                <version>9.2.11.v20150529</version>
+                <version>${jetty.maven.plugin.version}</version>
+
                 <configuration>
                     <scanIntervalSeconds>10</scanIntervalSeconds>
+
                     <webApp>
                         <contextPath>/</contextPath>
                     </webApp>
                 </configuration>
             </plugin>
+
         </plugins>
+
     </build>
+
 </project>
+```
